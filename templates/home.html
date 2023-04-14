@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>HOME :: Directory of Schools in Kenya {% block title %} {% endblock title %}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% load static %}
+
+    <link rel="stylesheet" href="{% static 'jquery-ui-1.13.2/jquery-ui.min.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap-4.6/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'datatables/datatables.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/media-queries.css' %}">
+
+    <script src="{% static 'jquery-ui-1.13.2/external/jquery/jquery.js' %}"></script>
+    <script src="{% static 'jquery-ui-1.13.2/jquery-ui.min.js' %}"></script>
+    <script src="{% static 'bootstrap-4.6/js/bootstrap.min.js' %}"></script>
+
+    <script src="{% static 'js/script.js' %}"></script>
+
+    <script defer src="{% static 'fontawesome-6.4/js/fontawesome.min.js' %}"></script>
+    <script defer src="{% static 'datatables/datatables.min.js' %}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#myTable').DataTable( {
+                dom: 'Bfrtip',
+                "pageLength": 50,
+                buttons: [
+                    'copy', 'excel', {
+                        extend: 'pdfHtml5',
+                        customize: function ( doc ) {
+                            doc.content.splice( 1, 0, {} );
+                        }
+                    }, 'print'
+                ]
+            } );
+
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+            });
+
+            $('#id_old_password').attr('class', 'form-control');
+            $('#id_new_password1').attr('class', 'form-control');
+            $('#id_new_password2').attr('class', 'form-control');
+
+        });
+    </script>
+{% block page_style %}{% endblock page_style %}
+{% block page_js %}{% endblock page_js %}
+
+</head>
+<body>
+    <div class="wrapper">
+    <div id="content" class="container-fluid">
+        <!-- Load top nav here -->
+        {% include 'top-navigation.html' %}
+        {% if request.user.is_authenticated %}
+            {% include "auth_panel.html" %}
+        {% endif %}
+        <div class="content p-4">
+            {% include "home_jumbotron.html" %}
+            {% block page_content %}{% endblock page_content %}
+
+            <h3 class="">Recently Added Schools</h3><hr class="my-4">
+
+            {% if recent_schools|length > 0 %}
+                {% for school in recent_schools %}
+                    <div class="mb-4">
+                        <h4 class="bold">
+                            <a href="{% url 'schools:update' pk=school.pk %}">{{ school.name }}</a>
+                        </h4>
+                        <div>
+                            {{ school.description }}
+                        </div>
+                    </div>
+                {% endfor %}
+
+            {% endif %}
+        </div>
+    </div>
+</div>
+</body>
+</html>

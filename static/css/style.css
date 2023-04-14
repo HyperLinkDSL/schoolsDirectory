@@ -1,0 +1,19 @@
+.container, .container-fluid, .container-lg, .container-md, .container-sm, .container-xl {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.login-form-header{
+  background-color: #148d99;
+}
+.nav-item a {
+  color: #fff;
+}
+
+.auth-panel .nav-item a {
+  color: #007bff;;
+}
+
+.dropdown-menu {
+  background-color: #148d99;
+}
