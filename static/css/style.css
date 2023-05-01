@@ -2,9 +2,18 @@
   padding-right: 0;
   padding-left: 0;
 }
-
+.errorlist{ color: #781c14; }
 .login-form-header{
   background-color: #148d99;
+}
+.navbar{
+  padding: 0 1rem;
+}
+.nav-link {
+  padding: 1rem 1rem;
+}
+.navbar .nav-item:hover{
+  background-color: #148d77;
 }
 .nav-item a {
   color: #fff;
@@ -16,4 +25,11 @@
 
 .dropdown-menu {
   background-color: #148d99;
+}
+
+.navbar-nav .dropdown-menu {
+  margin-top: 0;
+}
+.workflow-tabs .nav-item a {
+  color: #007bff;
 }

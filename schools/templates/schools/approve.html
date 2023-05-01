@@ -1,8 +1,7 @@
 {% extends 'base.html' %}
-{% block title %} Edit School {% endblock title %}
 {% block page_content %}
     <nav class="navbar navbar-expand-lg context-bar">
-      <a class="navbar-brand" href="#"> <i class="fa fa-briefcase"></i> Schools</a>
+      <a class="navbar-brand" href="#"> <i class="fa fa-briefcase"></i> Approve {{ school.name }}</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -25,28 +24,19 @@
         <li class="nav-item">
             <a class="nav-link" href="{% url 'schools:details' pk=school.pk %}">Details</a>
         </li>
-        {% if request.user.is_authenticated %}
-            <li class="nav-item">
-                <a class="nav-link active" href="#">Update</a>
-            </li>
-        {% endif %}
-        {% if request.user.is_authenticated %}
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'schools:upload_pictures' pk=school.pk %}">
-                    Upload Pictures</a>
-            </li>
-        {% endif %}
-        {% if request.user.is_authenticated %}
-            <li class="nav-item">
-                <a class="nav-link disabled" href="#">Add Location</a>
-            </li>
-        {% endif %}
-        {% if request.user.is_superuser %}
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'schools:approve' pk=school.pk %}">Approve</a>
-            </li>
-        {% endif %}
-
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'schools:update' pk=school.pk %}">Update</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'schools:upload_pictures' pk=school.pk %}">
+            Upload Pictures</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#">Add Location</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active">Approve</a>
+      </li>
     </ul>
 
     {% include 'messages.html' %}
@@ -57,7 +47,7 @@
                     <h5 class="">Update {{ school.name }}</h5>
                 </div>
                 <div class="card-body">
-                    <form action="{% url 'schools:update' pk=school.pk %}" method="post">{% csrf_token %}
+                    <form action="{% url 'schools:approve' pk=school.pk %}" method="post">{% csrf_token %}
                         {{ form.as_p }}
                         <button type="submit" class="btn btn-info btn-block">Update</button>
                     </form>

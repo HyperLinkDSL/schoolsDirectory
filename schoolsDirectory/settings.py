@@ -26,8 +26,7 @@ SECRET_KEY = 'django-insecure-jusy-2v_p*1h$6566es4d**3_+xhm$v%d^$c9qy34aqeilyq!1
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -133,7 +132,7 @@ MAX_UPLOAD_SIZE = 5242880
 FILE_UPLOAD_PERMISSIONS = 0o640
 
 BASE_URL = 'localhost'
-LOGIN_URL = '/staff/login'
+LOGIN_URL = '/profiles/login'
 
 en_formats.DATE_FORMAT = 'd-m-Y'
 en_formats.DATETIME_FORMAT = 'd-m-Y H:i:s'
@@ -152,3 +151,15 @@ APPEND_SLASH = True
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# email_secrets = secrets.email_secrets()
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+FROM_MAIL = "info@hyperlink.co.ke"
+# EMAIL_USE_TLS = email_secrets["EMAIL_USE_TLS"]
+# EMAIL_HOST = email_secrets["EMAIL_HOST"]
+# EMAIL_HOST_USER = email_secrets["EMAIL_HOST_USER"]
+# EMAIL_HOST_PASSWORD = email_secrets["EMAIL_HOST_PASSWORD"]
+# EMAIL_PORT = email_secrets["EMAIL_PORT"]
+

@@ -1,14 +1,25 @@
+from django.conf import settings
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.mail import EmailMessage, send_mail
 from django.shortcuts import render, redirect, get_object_or_404
+from django.template.loader import render_to_string
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, FormView, DeleteView, ListView
+from django.utils.encoding import force_bytes, force_str
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.safestring import mark_safe
+from django.views.generic import TemplateView, FormView, DeleteView, ListView, CreateView
 from accounts.models import Profile
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import authenticate, login, logout
 from accounts.utils import get_all_perms, selected_perms
 from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from accounts.forms import CreateProfileForm, UpdateProfileForm
+from accounts.forms import CreateProfileForm, UpdateProfileForm, SignUpForm, RequestPasswordResetForm, ResetPasswordForm
 from django.contrib.auth.models import Permission
+
+from tokens import account_activation_token
 
 
 class ListProfiles(PermissionRequiredMixin, ListView):
@@ -340,3 +351,162 @@ class Home(PermissionRequiredMixin, TemplateView):
         }
 
         return render(request, self.template_name, context=context)
+
+
+class SignUp(CreateView):
+    form_class = SignUpForm
+    template_name = 'accounts/signup.html'
+
+    def post(self, request, *args, **kwargs):
+
+        form = self.form_class(data=request.POST)
+
+        if form.is_valid():
+
+            profile = form.save(commit=False)
+            profile.is_active = False
+            profile.save()
+
+            mail_subject = 'Activate your user account.'
+            message = render_to_string('accounts/template_activate_account.html', {
+                'user': profile.last_name,
+                'domain': get_current_site(request).domain,
+                'uid': urlsafe_base64_encode(force_bytes(profile.pk)),
+                'token': account_activation_token.make_token(profile),
+                'protocol': 'https' if request.is_secure() else 'http'
+            })
+            email = EmailMessage(mail_subject, message, to=[profile.email])
+            if email.send():
+                messages.success(request, mark_safe(f'Please go to your email <b>{profile.email}</b> inbox and click on \
+                        received activation link to confirm and complete the registration. <b>Note:</b> Check your spam folder.'),
+                                 extra_tags="alert alert-success")
+            else:
+                messages.error(request,
+                               mark_safe(f'Problem sending confirmation email to <b>{profile.email}</b>, check if you typed it correctly.'),
+                               extra_tags="alert alert-danger")
+
+            return render(request, template_name=self.template_name)
+
+        else:
+            messages.error(request, 'Errors occurred in the form', extra_tags='alert alert-danger')
+
+            return render(request, template_name=self.template_name, context={"form": form})
+
+
+class ActivateAccount(TemplateView):
+    model = Profile
+
+    def get(self, request, uidb64=None, *args, **kwargs):
+
+        token = kwargs["token"]
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            profile = self.model.objects.get(pk=uid)
+        except(TypeError, ValueError, OverflowError, Profile.DoesNotExist):
+            profile = None
+
+        if profile is not None and account_activation_token.check_token(profile, token):
+            profile.is_active = True
+            profile.email_verified = True
+            profile.save()
+
+            messages.success(request,
+                             'Email confirmed. Now you can login',
+                             extra_tags="alert alert-success")
+
+            return redirect('profiles:login')
+        else:
+            messages.error(request, 'Activation link is invalid!', extra_tags="alert alert-danger")
+
+        return redirect('profiles:login')
+
+
+class RequestPasswordChange(FormView):
+    model = Profile
+    template_name = 'accounts/request_password_change.html'
+    form_class = RequestPasswordResetForm
+
+    def post(self, request, *args, **kwargs):
+
+        form = self.form_class(data=request.POST)
+
+        if form.is_valid():
+            try:
+                profile = self.model.objects.get(email=form.cleaned_data['email'])
+            except ObjectDoesNotExist:
+                profile = None
+            if profile is None:
+                messages.error(request, "Email does not exist here", extra_tags='alert alert-info')
+            else:
+                #create token
+                token_generator = PasswordResetTokenGenerator()
+                token = token_generator.make_token(user=profile)
+
+                html_msg = "Someone made a request to reset your password."
+                html_msg += "<p>If this was you, please"
+                html_msg += f"<a href='http://{get_current_site(request).domain}/profiles/reset-requested-password?token={token}&email={profile.email}' target='_blank'>"
+                html_msg += "click here</a>.</p> Otherwise, ignore this email but also report to officials.<p>NOTE: This link can be used only once.</a>"
+
+                send_mail(
+                    subject="Password reset",
+                    message="",
+                    html_message=html_msg,
+                    recipient_list=[profile.email],
+                    from_email=settings.FROM_MAIL
+                )
+
+                messages.success(request, "Check your email inbox", extra_tags='alert alert-info')
+        else:
+            messages.error(request, "Errors occurred, form is not valid", extra_tags='alert alert-danger')
+
+        context = {
+            'form': form,
+        }
+        return render(request, self.template_name, context=context)
+
+
+class ChangeRequestedPassword(FormView):
+    model = Profile
+    form_class = ResetPasswordForm
+    template_name = "accounts/reset_requested_password.html"
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = get_object_or_404(self.model, email=self.request.GET.get('email'))
+        return kwargs
+
+    def post(self, request, *args, **kwargs):
+
+        profile = get_object_or_404(self.model, email=self.request.GET.get('email'))
+
+        form = self.form_class(
+            user=profile,
+            data=request.POST
+        )
+        if form.is_valid():
+
+            profile.set_password(raw_password=form.cleaned_data['new_password2'])
+            profile.save()
+            messages.success(request, 'New password created, login again', extra_tags='alert alert-success')
+
+            try:
+                send_mail(
+                    subject='Password Changed',
+                    message='Your password has just been changed. \nIf you did not make this change, please report the issue immediately. ',
+                    from_email=settings.FROM_MAIL,
+                    recipient_list=[profile.email],
+                    fail_silently=True
+                )
+            except Exception:
+                pass
+
+            return redirect(to='profiles:login')
+        else:
+            context = {
+                'profile': profile,
+                'form': form
+            }
+            messages.error(request, 'Errors occurred', extra_tags='alert alert-danger')
+
+            return render(request, self.template_name, context=context)
+

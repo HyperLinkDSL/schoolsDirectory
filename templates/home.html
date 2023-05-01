@@ -18,23 +18,11 @@
 
     <script src="{% static 'js/script.js' %}"></script>
 
-    <script defer src="{% static 'fontawesome-6.4/js/fontawesome.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'fontawesome-6.4/css/all.min.css' %}">
     <script defer src="{% static 'datatables/datatables.min.js' %}"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#myTable').DataTable( {
-                dom: 'Bfrtip',
-                "pageLength": 50,
-                buttons: [
-                    'copy', 'excel', {
-                        extend: 'pdfHtml5',
-                        customize: function ( doc ) {
-                            doc.content.splice( 1, 0, {} );
-                        }
-                    }, 'print'
-                ]
-            } );
 
             $('#sidebarCollapse').on('click', function () {
                 $('#sidebar').toggleClass('active');
@@ -68,7 +56,7 @@
                 {% for school in recent_schools %}
                     <div class="mb-4">
                         <h4 class="bold">
-                            <a href="{% url 'schools:update' pk=school.pk %}">{{ school.name }}</a>
+                            <a href="{% url 'schools:details' pk=school.pk %}">{{ school.name }}</a>
                         </h4>
                         <div>
                             {{ school.description }}

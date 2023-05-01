@@ -35,14 +35,11 @@
                 {% for school in schools %}
                     <div class="mb-4">
                         <h4 class="bold">
-                            <a href="{% url 'schools:update' pk=school.pk %}">{{ school.name }}</a>
+                            <a href="{% url 'schools:details' pk=school.pk %}">{{ school.name }}</a>
                         </h4>
-                        <div>
-                            {{ school.description }}
-                        </div>
+                        <div> {{ school.description }} </div>
                     </div>
                 {% endfor %}
-
             {% endif %}
         </div>
     </div>

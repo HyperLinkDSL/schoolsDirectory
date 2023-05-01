@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
-{% block title %} Add New School {% endblock %}
+{% block title %} Add Pictures {% endblock %}
 {% block page_content %}
     <nav class="navbar navbar-expand-lg context-bar">
       <a class="navbar-brand" href="#">
-          <i class="fa-solid fa-school-flag"></i> Add New School
+          <i class="fa-solid fa-school-flag"></i> Upload Pictures for {{ school.name }}
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -17,18 +17,21 @@
     </nav>
 
     <ul class="nav nav-tabs mb-4 workflow-tabs">
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'schools:details' pk=school.pk %}">Details</a>
+        </li>
       <li class="nav-item">
-        <a class="nav-link active" href="#">Description</a>
+        <a class="nav-link" href="{% url 'schools:update' pk=school.pk %}">Update</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link disabled" href="#">Upload Pictures</a>
+        <a class="nav-link active" href="#">Upload Pictures</a>
       </li>
       <li class="nav-item">
         <a class="nav-link disabled" href="#">Add Location</a>
       </li>
-        {% if user.is_superuser %}
+        {% if request.user.is_superuser %}
             <li class="nav-item">
-                <a class="nav-link disabled" href="">Approve</a>
+                <a class="nav-link" href="{% url 'schools:approve' pk=school.pk %}">Approve</a>
             </li>
         {% endif %}
     </ul>
@@ -39,10 +42,11 @@
         <div class="col-4">
             <div class="card">
                 <div class="card-body">
-                    <form action="{% url 'schools:create' %}" method="post">{% csrf_token %}
+                    <form action="{% url 'schools:upload_pictures' pk=school.pk %}"
+                          method="post" enctype="multipart/form-data">{% csrf_token %}
                         {{ form.as_p }}
                         <button type="submit" class="btn btn-info btn-block mt-2">
-                            Next <i class="fa fa-angles-right"></i>
+                            Upload <i class="fa fa-cloud-upload"></i>
                         </button>
                     </form>
 
@@ -52,30 +56,27 @@
         <div class="col-8">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="">10 Most Recent Schools</h5>
+                    <h5 class="">{{ school.name }} pictures</h5>
                 </div>
                 <div class="card-body">
-                    {% if schools|length > 0 %}
+                    {% if pictures|length > 0 %}
                         <table class="table table-striped table-bordered table-hover table-condensed">
                             <thead>
-                                <th>#</th><th>Name</th><th>Phone</th><th>Email</th>
+                                <th>#</th><th>Picture</th><th>Name</th><th>Description</th>
                             </thead>
                             <tbody>
-                                {% for school in schools %}
-                                    <tr>
-                                        <td>{{ school.num }}.</td>
-                                        <td>
-                                            <a href="{% url 'schools:update' pk=school.pk %}">
-                                                {{ school.name }}</a>
-                                        </td>
-                                        <td>{{ school.primary_phone }}</td>
-                                        <td>{{ school.primary_email }}</td>
-                                    </tr>
-                                {% endfor %}
+                            {% for picture in pictures %}
+                                <tr>
+                                    <td></td>
+                                    <td><img src="{{ picture.photo.url }}" width="100px;" alt=""></td>
+                                    <td>{{ picture.name }}</td>
+                                    <td>{{ picture.description }}</td>
+                                </tr>
+                            {% endfor %}
                             </tbody>
                         </table>
                     {% else %}
-                        <div class="alert alert-info">No schools have been added yet</div>
+                        <div class="alert alert-info">No pictures added yet</div>
                     {% endif %}
                 </div>
             </div>

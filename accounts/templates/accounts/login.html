@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Directory of Schools in Kenya :: {% block title %}Login{% endblock title %}</title>
+    <title>{% block title %}Login{% endblock title %} :: Directory of Schools in Kenya</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'bootstrap-4.6/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
@@ -53,14 +53,19 @@
         </p>
             {% include 'messages.html' %}
             {% block form_el %}
-            <label class="label">Username</label>
+            <label class="label">Email</label>
             <div class="">{{ form.username }}</div>
 
             <label class="label">{{ form.password.label }}</label>
             <div class="">{{ form.password }}</div>
-            <p class="text-right">
-                <button type="submit" class="btn btn-info">Login <i class="fa fa-lock-open"></i> </button>
-            </p>
+                <div class="d-flex justify-content-between mt-5">
+                    <button type="submit" class="btn btn-info text-right">Login
+                        <i class="fa fa-lock-open"></i>
+                    </button>
+
+                    <a href="{% url 'profiles:request_password_change' %}" class="btn"> Reset Password </a>
+                    <a href="{% url 'profiles:signup' %}" class="bg-light btn"> SignUp </a>
+                </div>
             {% endblock form_el %}
 
         </form>
