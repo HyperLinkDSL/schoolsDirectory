@@ -1,0 +1,16 @@
+{% load i18n %}
+<div class="container-fluid bg-light">
+    <footer class="py-3">
+        <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+            <li class="nav-item"><a href="/" class="nav-link px-2 text-muted">Home</a></li>
+            <li class="nav-item"><a href="{% url 'about' %}" class="nav-link px-2 text-muted">About</a></li>
+            <li class="nav-item"><a href="{% url 'schools:create' %}" class="nav-link px-2 text-muted">Add School</a>
+            </li>
+        </ul>
+        <p class="text-center text-muted"> {% now "Y" as current_year %}
+            {% blocktranslate %} © Copyright {{ current_year }},
+                <a href="https://hyperlink.co.ke" target="_blank">HyperLink DSL</a>.
+            {% endblocktranslate %}
+        </p>
+    </footer>
+</div>

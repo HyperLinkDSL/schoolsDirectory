@@ -1,9 +1,26 @@
 <div class="jumbotron py-4">
-  <h2 class="">Featured School</h2>
-  <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
-  <hr class="my-4">
-  <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+  <h1 class="">Directory of Schools in Kenya</h1>
   <p class="lead">
-    <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+      Welcome to our community-driven directory of schools in Kenya! We are a platform that empowers the
+      general public to contribute to our database of schools by adding and updating information about
+      schools in their communities. Our goal is to create a comprehensive and up-to-date directory that
+      reflects the diversity of Kenya's schools, with the help of the people who know them
+      best - the local communities. We believe that by working together, we can provide a valuable
+      resource that benefits students, parents, educators, and the general public.
+  </p>
+  <hr class="my-4 white-hr">
+  <p>Thank you for joining us on this mission to create a more inclusive and collaborative platform for
+      finding and sharing information about schools in Kenya. Please create an account and start adding
+      schools within your locality!</p>
+  <p class="lead">
+      {% if request.user.is_authenticated %}
+          <a class="btn btn-primary btn-lg" href="{% url 'schools:create' %}">
+              <i class="fa fa-plus-circle"></i> Add New School
+          </a>
+        {% else %}
+          <a class="btn btn-primary btn-lg" href="{% url 'profiles:login' %}">
+              <i class="fa fa-plus-circle"></i> Add New School
+          </a>
+      {% endif %}
   </p>
 </div>

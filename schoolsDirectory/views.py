@@ -15,3 +15,7 @@ class Home(TemplateView):
         }
 
         return render(request, template_name=self.template_name, context=context)
+
+
+class About(TemplateView):
+    template_name = "about.html"

@@ -2,23 +2,33 @@
 {% block title %}{{ school.name }}{% endblock title %}
 {% block page_content %}
     <nav class="navbar navbar-expand-lg context-bar">
-      <a class="navbar-brand" href="#"> <i class="fa fa-briefcase"></i> {{ school.name }}</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav ml-auto">
+        <a class="navbar-brand" href="#"> <i class="fa fa-briefcase"></i> {{ school.name }}</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav ml-auto">
+                {% if request.user.is_authenticated %}
+                    <a class="nav-item nav-link" href="{% url 'schools:create' %}">
+                        <i class="fa fa-plus-circle"></i> Add New
+                    </a>
+                {% else %}
+                    <a class="nav-item nav-link" href="{% url 'profiles:login' %}">
+                        <i class="fa fa-plus-circle"></i> Add New
+                    </a>
+                {% endif %}
 
-          <a class="nav-item nav-link" href="{% url 'schools:create' %}">
-              <i class="fa fa-plus-circle"></i> Add New
-          </a>
-            <a class="nav-item nav-link" href="{% url 'schools:list' %}">
-              <i class="fa fa-list"></i> View
-            </a>
-          <a class="nav-item nav-link" href="{% url 'schools:delete' pk=school.pk %}">
-              <i class="fa fa-trash"></i> Delete</a>
+                <a class="nav-item nav-link" href="{% url 'schools:list' %}">
+                    <i class="fa fa-list"></i> View
+                </a>
+                {% if request.user.is_superuser %}
+                    <a class="nav-item nav-link" href="{% url 'schools:delete' pk=school.pk %}">
+                        <i class="fa fa-trash"></i> Delete</a>
+                {% endif %}
+
+            </div>
         </div>
-      </div>
     </nav>
 
     <ul class="nav nav-tabs mb-4 workflow-tabs">
@@ -26,20 +36,20 @@
             <a class="nav-link active" href="">Details</a>
         </li>
         {% if request.user.is_authenticated %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'schools:update' pk=school.pk %}">Update</a>
-          </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'schools:update' pk=school.pk %}">Update</a>
+            </li>
         {% endif %}
         {% if request.user.is_authenticated %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'schools:upload_pictures' pk=school.pk %}">
-                Upload Pictures</a>
-          </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'schools:upload_pictures' pk=school.pk %}">
+                    Upload Pictures</a>
+            </li>
         {% endif %}
         {% if request.user.is_authenticated %}
-          <li class="nav-item">
-            <a class="nav-link" href="#">Add Location</a>
-          </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Add Location</a>
+            </li>
         {% endif %}
         {% if request.user.is_superuser %}
             <li class="nav-item">
@@ -59,16 +69,43 @@
                     {% if school %}
                         <table class="table table-hover table-bordered table-striped table-responsive table-sm">
                             <tbody>
-                                <tr><td class="">Name</td><td>{{ school.name }}</td></tr>
-{#                                <tr><td class="">Description</td><td>{{ school.description }}</td></tr>#}
-                                <tr><td>Phone</td><td>{{ school.primary_phone }}</td></tr>
-                                <tr><td>Secondary Phone</td><td>{{ school.secondary_phone }}</td></tr>
-                                <tr><td>Email</td><td>{{ school.primary_email }}</td></tr>
-                                <tr><td>Additional email</td><td>{{ school.additional_email }}</td></tr>
-                                <tr><td>Address</td><td>{{ school.address }}</td></tr>
-                                <tr><td>Additional Address</td><td>{{ school.additional_address }}</td></tr>
-                                <tr><td>Created</td><td>{{ school.created|date:'d-m-Y H:i' }}</td></tr>
-                                <tr><td>Is approved</td><td>{{ school.is_approved }}</td></tr>
+                            <tr>
+                                <td class="">Name</td>
+                                <td>{{ school.name }}</td>
+                            </tr>
+                            {#                                <tr><td class="">Description</td><td>{{ school.description }}</td></tr>#}
+                            <tr>
+                                <td>Phone</td>
+                                <td>{{ school.primary_phone }}</td>
+                            </tr>
+                            <tr>
+                                <td>Secondary Phone</td>
+                                <td>{{ school.secondary_phone }}</td>
+                            </tr>
+                            <tr>
+                                <td>Email</td>
+                                <td>{{ school.primary_email }}</td>
+                            </tr>
+                            <tr>
+                                <td>Additional email</td>
+                                <td>{{ school.additional_email }}</td>
+                            </tr>
+                            <tr>
+                                <td>Address</td>
+                                <td>{{ school.address }}</td>
+                            </tr>
+                            <tr>
+                                <td>Additional Address</td>
+                                <td>{{ school.additional_address }}</td>
+                            </tr>
+                            <tr>
+                                <td>Created</td>
+                                <td>{{ school.created|date:'d-m-Y H:i' }}</td>
+                            </tr>
+                            <tr>
+                                <td>Is approved</td>
+                                <td>{{ school.is_approved }}</td>
+                            </tr>
                             </tbody>
                         </table>
                     {% endif %}
@@ -95,11 +132,13 @@
                             </div>
                         {% endfor %}
                     </div>
-                    <button class="carousel-control-prev" type="button" data-target="#carouselExampleIndicators" data-slide="prev">
+                    <button class="carousel-control-prev" type="button" data-target="#carouselExampleIndicators"
+                            data-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                         <span class="sr-only">Previous</span>
                     </button>
-                    <button class="carousel-control-next" type="button" data-target="#carouselExampleIndicators" data-slide="next">
+                    <button class="carousel-control-next" type="button" data-target="#carouselExampleIndicators"
+                            data-slide="next">
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         <span class="sr-only">Next</span>
                     </button>
@@ -107,9 +146,5 @@
             {% endif %}
         </div>
     </div>
-
-
-
-
 
 {% endblock page_content %}

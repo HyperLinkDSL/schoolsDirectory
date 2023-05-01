@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>About :: Directory of Schools in Kenya {% block title %} {% endblock title %}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% load static %}
+
+    <link rel="stylesheet" href="{% static 'jquery-ui-1.13.2/jquery-ui.min.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap-4.6/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'datatables/datatables.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/media-queries.css' %}">
+
+    <script src="{% static 'jquery-ui-1.13.2/external/jquery/jquery.js' %}"></script>
+    <script src="{% static 'jquery-ui-1.13.2/jquery-ui.min.js' %}"></script>
+    <script src="{% static 'bootstrap-4.6/js/bootstrap.min.js' %}"></script>
+
+    <script src="{% static 'js/script.js' %}"></script>
+
+    <link rel="stylesheet" href="{% static 'fontawesome-6.4/css/all.min.css' %}">
+    <script defer src="{% static 'datatables/datatables.min.js' %}"></script>
+
+{% block page_style %}{% endblock page_style %}
+{% block page_js %}{% endblock page_js %}
+
+</head>
+<body>
+    <div class="wrapper">
+    <div id="content" class="container-fluid">
+        <!-- Load top nav here -->
+        {% include 'top-navigation.html' %}
+        {% if request.user.is_authenticated %}
+            {% include "auth_panel.html" %}
+        {% endif %}
+        <div class="content p-4">
+            {% block page_content %}{% endblock page_content %}
+
+            <h1 class="">About the Directory of Schools in Kenya</h1><hr class="my-4">
+        <div>
+            <p>Welcome to our directory of schools in Kenya! We are a team of dedicated individuals
+                who are passionate about education and committed to providing the most comprehensive and
+                up-to-date information about all the schools in Kenya.</p>
+
+            <p>Our goal is to create a centralized and accessible database that provides parents, students,
+                and educators with a one-stop-shop for all the information they need about schools in Kenya.
+                We understand that finding the right school can be a daunting task, and we want to make the
+                process as smooth and stress-free as possible.</p>
+
+            <p>We pride ourselves on the accuracy and completeness of our information. We painstakingly
+                research and verify every detail of each school in our directory, from their location,
+                contact information, and facilities to their academic programs, extracurricular activities,
+                and admission requirements.</p>
+
+            <p>Our team is made up of experienced researchers, writers, and editors who are passionate
+                about education and have a deep understanding of the Kenyan education system. We are
+                constantly updating our database to ensure that our users have access to the most current
+                and reliable information.</p>
+
+            <p>We believe that education is the key to unlocking the full potential of every individual,
+                and we are committed to supporting this mission by providing the best possible resource
+                for finding the right school in Kenya.</p>
+
+            <p>Thank you for choosing our directory of all schools in Kenya. We look forward to being a
+                valuable resource for you and your family.</p>
+        </div>
+
+        </div>
+    </div>
+    {% include 'footer.html' %}
+</div>
+</body>
+</html>

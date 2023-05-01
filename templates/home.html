@@ -4,6 +4,14 @@
     <title>HOME :: Directory of Schools in Kenya {% block title %} {% endblock title %}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Community-Driven Directory of Schools in Kenya</title>
+    <meta name="description" content="Welcome to our community-driven directory of schools in Kenya! We empower the general public to contribute to our database of schools by adding and updating information about schools in their communities.">
+    <meta name="keywords" content="schools, Kenya, education, directory, community-driven">
+    <meta name="author" content="HyperLink Data Solutions">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{% url 'home' %}">
     {% load static %}
 
     <link rel="stylesheet" href="{% static 'jquery-ui-1.13.2/jquery-ui.min.css' %}">
@@ -67,6 +75,7 @@
             {% endif %}
         </div>
     </div>
+    {% include 'footer.html' %}
 </div>
 </body>
 </html>

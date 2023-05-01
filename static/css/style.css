@@ -33,3 +33,29 @@
 .workflow-tabs .nav-item a {
   color: #007bff;
 }
+
+.jumbotron {
+  background-image: url('/static/schools-images/iStock-1239321686.jpg');
+  background-size: cover;
+  position: relative; /* needed for absolute positioning */
+}
+
+.jumbotron::before {
+  content: "";
+  background-color: rgba(0, 0, 0, 0.5); /* semi-transparent black overlay */
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.jumbotron h1,
+.jumbotron p {
+  position: relative; /* needed for z-index to work */
+  z-index: 1; /* make sure text is on top of the overlay */
+  color: #ffffff; /* set the color for the text */
+}
+hr.white-hr {
+  border-top: 1px solid white;
+}
