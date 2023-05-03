@@ -1,5 +1,4 @@
 def counties():
-
     return [
         ("01", "Mombasa"),
         ("02", "Kwale"),

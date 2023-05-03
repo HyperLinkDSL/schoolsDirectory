@@ -13,7 +13,6 @@ class SchoolDetails(DetailView):
     template_name = "schools/details.html"
 
     def get_context_data(self, *, object_list=None, **kwargs):
-
         context = super().get_context_data(**kwargs)
 
         context['pictures'] = Photo.objects.filter(school_id=self.kwargs['pk'])
@@ -131,7 +130,8 @@ class UploadPictures(LoginRequiredMixin, FormView):
 
             photo.save()
 
-            messages.success(request, 'Success, photo saved. Select more picture to upload', extra_tags='alert alert-success')
+            messages.success(request, 'Success, photo saved. Select more picture to upload',
+                             extra_tags='alert alert-success')
 
         else:  # Form is not valid
 
@@ -165,7 +165,6 @@ class DeleteSchool(PermissionRequiredMixin, DeleteView):
     model = School
 
     def get_success_url(self):
-
         messages.success(self.request, 'Success, school has been deleted', extra_tags='alert alert-info')
 
         return reverse_lazy('schools:list')
@@ -205,7 +204,6 @@ class CreateSchool(LoginRequiredMixin, CreateView):
         form = self.form_class(data=request.POST)
 
         if form.is_valid():
-
             school_obj = form.save(commit=False)
             school_obj.created_by = request.user
             school_obj.save()

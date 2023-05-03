@@ -8,12 +8,6 @@
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav ml-auto">
-          <a class="nav-item nav-link" href="{% url 'home' %}">
-              <i class="fa fa-list"></i> View</a>
-        </div>
-      </div>
     </nav>
 
     {% include 'messages.html' %}
@@ -21,10 +15,13 @@
     <div class="row">
         <div class="col-8">
             <div class="card">
-                <div class="card-header">
-                    <h5 class="">SignUp</h5>
+                <div class="card-body">
+                    <p>
+                        Thank you for joining us on this mission to create a more inclusive and
+                        collaborative platform for finding and sharing information about schools in Kenya.
+                        Please create an account to start adding schools within your locality!
+                    </p>
                 </div>
-                <div class="card-body"></div>
             </div>
         </div>
         <div class="col-4">

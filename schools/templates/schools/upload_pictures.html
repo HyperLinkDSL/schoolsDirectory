@@ -67,7 +67,7 @@
                             <tbody>
                             {% for picture in pictures %}
                                 <tr>
-                                    <td></td>
+                                    <td>{{ forloop.counter }}.</td>
                                     <td><img src="{{ picture.photo.url }}" width="100px;" alt=""></td>
                                     <td>{{ picture.name }}</td>
                                     <td>{{ picture.description }}</td>

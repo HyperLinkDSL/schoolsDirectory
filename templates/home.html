@@ -62,12 +62,27 @@
 
             {% if recent_schools|length > 0 %}
                 {% for school in recent_schools %}
-                    <div class="mb-4">
-                        <h4 class="bold">
-                            <a href="{% url 'schools:details' pk=school.pk %}">{{ school.name }}</a>
-                        </h4>
-                        <div>
-                            {{ school.description }}
+
+                    <div class="row">
+                        <div class="col-3">
+                            <div class="card" style="">
+                                <a href="{% url 'schools:details' pk=school.pk %}">
+                                    {% if school.thumbnail %}
+                                    <img src="{{ school.thumbnail.thumbnail.url }}"
+                                         alt="{{ school.thumbnail.name }}" class="card-img">
+                                    {% else %}
+                                        <img src="{% static '/schools-images/default_thumbnail.jpg' %}" alt="Default Thumbnail">
+                                    {% endif %}
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-9">
+                            <h4 class="bold">
+                                <a href="{% url 'schools:details' pk=school.pk %}">{{ school.name }}</a>
+                            </h4>
+                            <div class="lead">
+                                {{ school.description }}
+                            </div>
                         </div>
                     </div>
                 {% endfor %}
