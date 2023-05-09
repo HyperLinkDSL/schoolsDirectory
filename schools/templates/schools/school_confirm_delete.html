@@ -1,4 +1,11 @@
 {% extends 'base.html' %}
+{% load static %}
+{% block metatags %}
+
+    <!-- Favicon -->
+    <link rel="icon" href="{% static 'schools-images/favicon.ico' %}" type="image/x-icon">
+
+{% endblock metatags %}
 {% block page_content %}
     <nav class="navbar navbar-expand-lg context-bar">
       <a class="navbar-brand" href="#"> <i class="fa fa-briefcase"></i> Schools</a>
@@ -57,9 +64,5 @@
             </div>
         </div>
     </div>
-
-
-
-
 
 {% endblock page_content %}
