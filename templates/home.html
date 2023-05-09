@@ -7,12 +7,32 @@
 
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Community-Driven Directory of Schools in Kenya</title>
-    <meta name="description" content="Welcome to our community-driven directory of schools in Kenya! We empower the general public to contribute to our database of schools by adding and updating information about schools in their communities.">
+    {% load static %}
+    <meta name="description"
+          content="Welcome to our community-driven directory of schools in Kenya! We empower the general public to contribute to our database of schools by adding and updating information about schools in their communities.">
     <meta name="keywords" content="schools, Kenya, education, directory, community-driven">
     <meta name="author" content="HyperLink Data Solutions">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="{% url 'home' %}">
-    {% load static %}
+    <link rel="canonical" href="https://schools.hyperlink.co.ke/">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Directory of Schools in Kenya">
+    <meta property="og:description"
+          content="Find comprehensive information about schools in Kenya. Search and discover schools in your area with our community-driven directory.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://schools.hyperlink.co.ke/">
+    <meta property="og:image" content="https://schools.hyperlink.co.ke{% static 'schools-images/map_of_kenya.png' %}">
+    <meta property="og:image:alt" content="Directory of Schools in Kenya">
+
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Directory of Schools in Kenya">
+    <meta name="twitter:description"
+          content="Find comprehensive information about schools in Kenya. Search and discover schools in your area with our community-driven directory.">
+    <meta name="twitter:image" content="https://schools.hyperlink.co.ke{% static 'schools-images/map_of_kenya.png' %}">
+
+    <!-- Favicon -->
+    <link rel="icon" href="{% static 'schools-images/favicon.ico' %}" type="image/x-icon">
 
     <link rel="stylesheet" href="{% static 'jquery-ui-1.13.2/jquery-ui.min.css' %}">
     <link rel="stylesheet" href="{% static 'bootstrap-4.6/css/bootstrap.min.css' %}">
@@ -42,12 +62,12 @@
 
         });
     </script>
-{% block page_style %}{% endblock page_style %}
-{% block page_js %}{% endblock page_js %}
+    {% block page_style %}{% endblock page_style %}
+    {% block page_js %}{% endblock page_js %}
 
 </head>
 <body>
-    <div class="wrapper">
+<div class="wrapper">
     <div id="content" class="container-fluid">
         <!-- Load top nav here -->
         {% include 'top-navigation.html' %}
@@ -58,7 +78,8 @@
             {% include "home_jumbotron.html" %}
             {% block page_content %}{% endblock page_content %}
 
-            <h3 class="">Recently Added Schools</h3><hr class="my-4">
+            <h3 class="">Recently Added Schools</h3>
+            <hr class="my-4">
 
             {% if recent_schools|length > 0 %}
                 {% for school in recent_schools %}
@@ -68,10 +89,11 @@
                             <div class="card" style="">
                                 <a href="{% url 'schools:details' pk=school.pk %}">
                                     {% if school.thumbnail %}
-                                    <img src="{{ school.thumbnail.thumbnail.url }}"
-                                         alt="{{ school.thumbnail.name }}" class="card-img">
+                                        <img src="{{ school.thumbnail.thumbnail.url }}"
+                                             alt="{{ school.thumbnail.name }}" class="card-img">
                                     {% else %}
-                                        <img src="{% static '/schools-images/default_thumbnail.jpg' %}" alt="Default Thumbnail">
+                                        <img src="{% static '/schools-images/default_thumbnail.jpg' %}"
+                                             alt="Default Thumbnail">
                                     {% endif %}
                                 </a>
                             </div>

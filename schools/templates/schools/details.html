@@ -1,5 +1,27 @@
 {% extends 'base.html' %}
 {% block title %}{{ school.name }}{% endblock title %}
+{% load static %}
+{% block metatags %}
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="{{ school.name }}">
+    <meta property="og:description"
+          content="{{ school.description }}">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://schools.hyperlink.co.ke{% url 'schools:details' pk=school.pk %}">
+    <meta property="og:image" content="https://schools.hyperlink.co.ke{% static 'schools-images/map_of_kenya.png' %}">
+    <meta property="og:image:alt" content="Directory of Schools in Kenya">
+
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ school.name }}">
+    <meta name="twitter:description"
+          content="{{ school.description }}">
+    <meta name="twitter:image" content="https://schools.hyperlink.co.ke{% static 'schools-images/map_of_kenya.png' %}">
+
+    <!-- Favicon -->
+    <link rel="icon" href="{% static 'schools-images/favicon.ico' %}" type="image/x-icon">
+{% endblock metatags %}
 {% block page_content %}
     <nav class="navbar navbar-expand-lg context-bar">
         <a class="navbar-brand" href="#"> <i class="fa fa-briefcase"></i> {{ school.name }}</a>
@@ -48,7 +70,7 @@
         {% endif %}
         {% if request.user.is_authenticated %}
             <li class="nav-item">
-                <a class="nav-link" href="#">Add Location</a>
+                <a class="nav-link disabled" href="#">Add Location</a>
             </li>
         {% endif %}
         {% if request.user.is_superuser %}
